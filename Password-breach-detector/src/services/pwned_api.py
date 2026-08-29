@@ -26,3 +26,13 @@ def check_password_prefix(prefix: str):
     if response.status_code != 200:
         raise RuntimeError(f"Error fetching data from Pwned API: {response.status_code}") #si la solicitud no fue exitosa, se lanza un error con un mensaje que indica el código de estado de la respuesta.
     return response.text #si fue buena la solicitud se almacena aca
+
+def get_password_leaks_count(hashes_response: str, hash_suffix: str) -> int:
+    # This function would implement the logic to check for password breaches
+    # Esto convierte el texto largo en una lista de líneas: ['SUFIJO1:12', 'SUFIJO2:29', ...]
+    lines = hashes_response.splitlines()
+    for line in lines:
+        hash_part, count = line.split(':')
+        if hash_part == hash_suffix:
+            return int(count)
+    return 0
